@@ -125,7 +125,7 @@ const actions = {
     },
 
     create<%=name_singular%>({commit}, payload = {}) {
-        api.post(payload, '/<%=plural_underscore%>.json').then((response)=>{
+        return api.post(payload, '/<%=plural_underscore%>.json').then((response)=>{
             const data = response.data;
             if(data.status == "SUCCESS") {
                 // commit(types.<%=get_singular_name%>, response.data);
