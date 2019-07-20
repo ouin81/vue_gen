@@ -1,0 +1,67 @@
+<template>
+  <row>
+    <va-box theme="box-info" :title="$t('views.common.title.list_models', { model: $t('activerecord.models.<%=singular_name%>')} )" :isBorder="true" widgetType>
+      <va-pagination slot="pagination" :pageIndex="pagination.pageIndex" :totalCount="pagination.totalCount" @click="paging"></va-pagination>
+      <div slot="content" class="table-responsive">
+        <table class="table table-bordered table-hover dataTable">
+          <thead>
+            <tr>
+              <%- editable_attributes.map do |attribute| -%>
+              <th>{{$t('activerecord.attributes.<%=singular_name%>.<%= attribute.name %>')}}</th>
+              <%- end -%>
+            </tr>
+          </thead>
+          <tbody>
+            <router-link tag="tr" :to="{name: '<%=router_edit_name%>', params: {id: <%=singular_name%>.id}}" v-for="(<%=singular_name%>, index) in <%=plural_name%>" :key="index">
+              <%- editable_attributes.map do |attribute| -%>
+              <td>{{<%=singular_name%>.<%= attribute.name %>}}</td>
+              <%- end -%>
+            </router-link>
+          </tbody>
+        </table>
+      </div>
+      <div class="box-footer clearfix" slot="footer">
+        <router-link :to="{name: '<%=router_new_name%>'}" class="btn btn-sm btn-info btn-flat pull-left"><i class="fa fa-plus"></i> {{$t('views.common.btn.new_model',  { model: $t('activerecord.models.<%=singular_name%>') })}}</router-link>
+      </div>
+    </va-box>
+  </row>
+</template>
+
+<script>
+    import { mapGetters, mapActions } from 'vuex'
+    export default {
+        name: "<%= vue_component_kebab_name%>-index",
+        //common components are imported at lib/global.js
+        components: {
+        },
+        methods: {
+            ...mapActions('<%=plural_name%>/<%=plural_name%>', [
+              'fetch<%=name_plural%>'
+            ]),
+
+            paging(val) {
+              this.fetch<%=name_plural%>({'page': val});
+            }
+            
+        },
+        computed: {
+          ...mapGetters('<%=plural_name%>/<%=plural_name%>', [
+            '<%=plural_name%>',
+            'pagination'
+          ])
+        },
+        watch: { },
+        //https://jp.vuejs.org/v2/api/#オプション-ライフサイクルフック
+        created () { },
+        mounted () { 
+          this.fetch<%=name_plural%>();
+        },
+        data() {
+            return {
+            };
+        }
+    };
+</script>
+
+<style scoped>
+</style>

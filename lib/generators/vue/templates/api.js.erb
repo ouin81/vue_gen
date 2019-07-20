@@ -1,0 +1,55 @@
+import axios from 'axios'
+
+export default {
+  async fetch (payload = {}) {
+    try {
+      const response = axios.get(window.paginate_url('/<%=plural_underscore%>', payload.page), {});
+      return await Promise.resolve(response);
+    }
+    catch (error) {
+      return await Promise.reject(error);
+    }
+  },
+
+  async get (payload = {}) {
+    try {
+      const response = await axios.get('/<%=plural_underscore%>/' + payload.id +'.json', {});
+      return await Promise.resolve(response);
+    }
+    catch (error) {
+      return await Promise.reject(error);
+    }
+  },
+
+  async delete (payload = {}) {
+    try {
+      const response = await axios.delete('/<%=plural_underscore%>/' + payload.id +'.json', {});
+      return await Promise.resolve(response);
+    }
+    catch (error) {
+      return await Promise.reject(error);
+    }
+  },
+
+  async patch (payload = {}) {
+    try {
+      const response = await axios.patch('/<%=plural_underscore%>/' + payload.<%=singular_underscore%>.id +'.json', {<%=singular_underscore%>: payload.<%=singular_underscore%>});
+      return await Promise.resolve(response);
+    }
+    catch (error) {
+      return await Promise.reject(error);
+    }
+  },
+
+  async post (payload = {}) {
+    try {
+      const response = await axios.post('/<%=plural_underscore%>.json', {<%=singular_underscore%>: payload.<%=singular_underscore%>});
+      return await Promise.resolve(response);
+    }
+    catch (error) {
+      return await Promise.reject(error);
+    }
+  },
+
+  
+}

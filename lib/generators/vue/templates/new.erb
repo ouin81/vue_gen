@@ -1,0 +1,73 @@
+<template>
+  <row>
+    <column class="col-md-2"></column>
+    <column class="col-md-8">
+        <<%=component_form_tag%> :title="$t('views.common.title.new_model',  { model: $t('activerecord.models.<%=singular_name%>') })"></<%=component_form_tag%>>
+        <va-button :name="$t('views.common.btn.create')" theme="primary" :isBlock="false" @click="create"></va-button>
+        <va-button :name="$t('views.common.btn.cancel')" theme="warning" :isBlock="false" align="right" @click="cancel"></va-button>
+    </column>
+    <column class="col-md-2"></column>
+  </row>
+</template>
+
+<script>
+    import { mapGetters, mapActions } from 'vuex'
+    import <%=form_name%> from './_form'
+    export default {
+        name: "<%= vue_component_kebab_name%>-new",
+        //common components are imported at lib/global.js
+        //import form.vue
+        components: {
+            '<%=component_form_tag%>': <%=form_name%>
+        },
+        methods: {
+            ...mapActions('<%=plural_underscore%>/<%=plural_underscore%>', [
+              'init<%=name_singular%>',
+              'create<%=name_singular%>',
+            ]),
+
+            create() {
+                this.$validator.validateAll().then((result) => {
+                    if(result) {
+                        this.create<%=name_singular%>({
+                            <%=singular_name%>: this.<%=singular_name%>
+                        });
+                        return;
+                    }
+                    return result;
+                })
+            },
+            
+            cancel() {
+                this.$router.push({name: '<%=router_index_name%>'});
+            }
+        },
+        computed: {
+            ...mapGetters('<%=plural_underscore%>/<%=plural_underscore%>', [
+                '<%=singular_underscore%>',
+            ])
+         },
+        watch: { },
+        //https://jp.vuejs.org/v2/api/#オプション-ライフサイクルフック
+        created () { },
+        mounted () {
+            this.init<%=name_singular%>();
+         },
+        // beforeRouteLeave (to, from, next) {
+        //     const isLeave = window.confirm('Do you really want to leave? you have unsaved changes!')
+        //     next(isLeave);
+        // },
+        provide() {
+            return {
+                $validator: this.$validator,
+            }
+        },
+        data() {
+            return {
+            };
+        }
+    }
+</script>
+
+<style scoped>
+</style>

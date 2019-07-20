@@ -1,0 +1,62 @@
+<template>
+  <va-box :title="title" theme="box-primary" :isBorder="true" widgetType>
+    <div slot="content">
+    <%- editable_attributes.map do |attribute| 
+        if attribute.name != "id"
+            case type = input_type(attribute.type)
+            when :textarea then -%>
+        <va-textarea-group :title="$t('activerecord.attributes.<%=singular_name%>.<%= attribute.name %>')" name="<%= attribute.name %>" vaId="<%= attribute.name %>" :isDisabled="false" placeholder="Enter <%= attribute.human_name %>" :value="<%=singular_name%>.<%=attribute.name%>" @input=" value => updateValue(value, '<%=attribute.name%>')"></va-textarea-group>
+        <%- when :checkbox then -%>
+        <va-checkbox :text="$t('activerecord.attributes.<%=singular_name%>.<%= attribute.name %>')" name="<%= attribute.name %>" :realVal="true" :value="<%=singular_name%>.<%=attribute.name%>"  @change=" value => updateValue(value, '<%=attribute.name%>')"></va-checkbox>
+        <%- when :radio then -%>
+        <va-radio :realVal="true" :value="<%=singular_name%>.<%=attribute.name%>" name="<%= attribute.name %>" @change=" value => updateValue(value, '<%=attribute.name%>')">
+            {{$t('activerecord.attributes.<%=singular_name%>.<%= attribute.name %>')}}
+        </va-radio>
+        <%- else -%>
+        <va-input-group :title="$t('activerecord.attributes.<%=singular_name%>.<%= attribute.name %>')" name="<%= attribute.name %>" vaId="<%= attribute.name %>" type="<%= type %>" placeholder="Enter <%= attribute.human_name %>" :value="<%=singular_name%>.<%=attribute.name%>" @input=" value => updateValue(value, '<%=attribute.name%>')"></va-input-group>
+        <%- end -%>
+        <small v-if="errors.has('<%=attribute.name%>')" class="errors text-red">{{ errors.first('<%=attribute.name%>') }}</small>
+    <%- end
+    end -%>
+    </div>
+  </va-box>
+</template>
+<script>
+    import { mapGetters, mapActions } from 'vuex'
+    export default {
+        name: "<%= vue_component_kebab_name%>-form",
+        props: {
+            title: {
+                type: String,
+                default: ""
+            }
+        },
+        //common components are imported at lib/global.js
+        components: { },
+        methods: {
+            ...mapActions('<%=plural_underscore%>/<%=plural_underscore%>', [
+              'update<%=name_singular%>'
+            ]),
+            updateValue(val, key) {
+                this.update<%=name_singular%>({'val': val, 'key': key})
+            }
+        },
+        computed: { 
+            ...mapGetters('<%=plural_underscore%>/<%=plural_underscore%>', [
+                '<%=singular_underscore%>',
+            ])
+        },
+        watch: { },
+        //https://jp.vuejs.org/v2/api/#オプション-ライフサイクルフック
+        created() { },
+        mounted() { },
+        inject: ['$validator'],
+        data() {
+            return {
+            };
+        }
+    }
+</script>
+
+<style scoped>
+</style>

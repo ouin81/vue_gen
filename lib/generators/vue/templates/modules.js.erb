@@ -1,0 +1,163 @@
+import router from './../../../router'
+// put customize api here
+// import api from './../../api/<%=plural_underscore%>/<%=plural_underscore%>'
+import api from './../../../lib/api_common'
+import error_handler from './../../../lib/error-handler'
+
+
+const types = {
+    <%=fetch_plural_name%>: '<%=fetch_plural_name%>',
+    <%=get_singular_name%>: '<%=get_singular_name%>',
+    <%=update_singular_name%>: '<%=update_singular_name%>',
+    <%=delete_singular_name%>: '<%=delete_singular_name%>',
+    <%=init_singular_name%>: '<%=init_singular_name%>',
+    // add other type here
+}
+
+const state = {
+    <%=plural_underscore%>: [{
+        <%- editable_attributes.map do |attribute| -%>
+            <%= attribute.name %>: '<%=attribute.default %>',
+        <%- end -%>
+    }],
+    <%=singular_underscore%>: {
+        <%- editable_attributes.map do |attribute| -%>
+            <%= attribute.name %>: '<%=attribute.default %>',
+        <%- end -%>
+    },
+    default: {
+        <%- all_attributes.map do |attribute| -%>
+            <%= attribute.name %>: null,
+        <%- end -%>
+    },
+    pagination: {
+        totalCount: 0
+    },
+    // add other state here
+}
+
+const mutations = {
+    [types.<%=fetch_plural_name%>](state, data) {
+        state.<%=plural_underscore%> = data.<%=plural_underscore%>;
+        state.pagination.totalCount = data.totalCount || 0;
+    },
+
+    [types.<%=get_singular_name%>](state, data) {
+        state.<%=singular_underscore%> = data;
+    },
+
+    [types.<%=update_singular_name%>](state, payload) {
+        this._vm.$set(state.<%=singular_underscore%>, payload.key, payload.val);
+    },
+
+    [types.<%=delete_singular_name%>](state, payload) {
+        const index = state.<%=plural_underscore%>.map(<%=singular_name%> => {
+                return <%=singular_name%>.id;
+            }).indexOf(payload.id);
+        state.<%=plural_underscore%>.splice(index, 1);
+    },
+
+    [types.<%=init_singular_name%>](state, payload) {
+        Object.assign(state.<%=singular_underscore%>, state.default);
+    },
+
+    // add other mutation here
+
+}
+
+const getters = {
+    <%=plural_underscore%>: (state, getters, rootState, rootGetters) => {
+        return state.<%=plural_underscore%>
+    },
+
+    <%=singular_underscore%>: (state, getters, rootState, rootGetters) => {
+        return state.<%=singular_underscore%>
+    },
+
+    default: (state, getters, rootState, rootGetters) => {
+        return state.default;
+    },
+
+    pagination: (state, getters, rootState, rootGetters) => {
+        return state.pagination;
+    },
+    // add other getter here
+
+}
+
+const actions = {
+    init<%=name_singular%>({ commit }, payload = {}) {
+        commit(types.<%=init_singular_name%>, payload);
+    },
+
+    fetch<%=name_plural%>({ commit }, payload = {}) {
+        return api.fetch_paging(payload, '/<%=plural_underscore%>').then((response)=>{
+            commit(types.<%=fetch_plural_name%>, response.data);
+        }).catch((error) => {
+            error_handler.handleError(error, this._vm);
+        });
+    },
+
+    get<%=name_singular%>({ commit }, payload = {}) {
+        return api.get(payload, '/<%=plural_underscore%>/' + payload.id + '.json').then((response)=>{
+            commit(types.<%=get_singular_name%>, response.data);
+        }).catch((error) => {
+            error_handler.handleError(error, this._vm);
+        });
+    },
+
+    update<%=name_singular%>({commit}, payload = {}) {
+        commit(types.<%=update_singular_name%>, payload)
+    },
+
+    patch<%=name_singular%>({commit}, payload = {}) {
+        return api.patch(payload, '/<%=plural_underscore%>/' + payload.<%=singular_underscore%>.id + '.json').then((response)=>{
+            const data = response.data;
+            if(data.status == "SUCCESS") {
+                // commit(types.<%=get_singular_name%>, response.data);
+                this._vm.alert.success(this._vm, "Success.", () => {
+                    router.push({name: '<%=router_index_name%>'});
+                });
+            }
+        }).catch((error) => {
+            error_handler.handleError(error, this._vm);
+        });
+    },
+
+    create<%=name_singular%>({commit}, payload = {}) {
+        api.post(payload, '/<%=plural_underscore%>.json').then((response)=>{
+            const data = response.data;
+            if(data.status == "SUCCESS") {
+                // commit(types.<%=get_singular_name%>, response.data);
+
+                this._vm.alert.success(this._vm, "Success.", () => {
+                    router.push({name: '<%=router_index_name%>'});
+                });
+            }
+        }).catch((error) => {
+            error_handler.handleError(error, this._vm);
+        });
+    },
+
+    delete<%=name_singular%>({commit}, payload = {}) {
+        return api.delete(payload, '/<%=plural_underscore%>/' + payload.id + '.json').then((response)=>{
+            // commit(types.<%=delete_singular_name%>, payload)
+
+            this._vm.alert.success(this._vm, "Success.", () => {
+                router.push({name: '<%=router_index_name%>'});
+            });
+        }).catch((error) => {
+            error_handler.handleError(error, this._vm);
+        });
+    },
+
+    // add other action here
+}
+
+export default {
+    namespaced: true,
+    state,
+    getters,
+    mutations,
+    actions
+}

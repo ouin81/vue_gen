@@ -1,0 +1,74 @@
+<template>
+  <row>
+    <column class="col-md-2"></column>
+    <column class="col-md-8">
+        <<%=component_form_tag%> :title="$t('views.common.title.edit_model',  { model: $t('activerecord.models.<%=singular_name%>') })"></<%=component_form_tag%>>
+        <va-button :name="$t('views.common.btn.update')" theme="primary" :isBlock="false" @click="update"></va-button>
+        <va-button :name="$t('views.common.btn.cancel')" theme="warning" :isBlock="false" align="right" @click="cancel"></va-button>
+    </column>
+    <column class="col-md-2"></column>
+  </row>
+</template>
+
+<script>
+    import { mapGetters, mapActions } from 'vuex'
+    import <%=form_name%> from './_form'
+    export default {
+        name: "<%= vue_component_kebab_name%>-edit",
+        //common components are imported at lib/global.js
+        //import form.vue
+        components: {
+            '<%=component_form_tag%>': <%=form_name%>
+        },
+        methods: {
+            ...mapActions('<%=plural_underscore%>/<%=plural_underscore%>', [
+              'get<%=name_singular%>',
+              'update<%=name_singular%>',
+              'patch<%=name_singular%>',
+            ]),
+            
+            update() {
+                this.$validator.validateAll().then((result) => {
+                    if(result) {
+                        this.patch<%=name_singular%>({
+                            <%=singular_name%>: this.<%=singular_name%>
+                        }); 
+                        return;
+                    }
+                    return;
+                });
+            },
+
+            cancel() {
+                this.$router.push({name: '<%=router_index_name%>'});
+            }
+        },
+        computed: {
+            ...mapGetters('<%=plural_underscore%>/<%=plural_underscore%>', [
+                '<%=singular_underscore%>',
+            ])
+         },
+        watch: { },
+        //https://jp.vuejs.org/v2/api/#オプション-ライフサイクルフック
+        created () { },
+        mounted () {
+            this.get<%=name_singular%>({id: this.$route.params.id});
+        },
+        provide() {
+            return {
+                $validator: this.$validator,
+            }
+        },
+        // beforeRouteLeave (to, from, next) {
+        //     const isLeave = window.confirm('Do you really want to leave? you have unsaved changes!')
+        //     next(isLeave);
+        // },
+        data() {
+            return {
+            };
+        }
+    }
+</script>
+
+<style scoped>
+</style>

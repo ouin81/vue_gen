@@ -1,0 +1,15 @@
+Description:
+    Create Vue files from model corresponding to the Rails views
+
+Example:
+    rails generate vue SomeModel
+    
+    This will create:
+        create  app/javascript/views/some_models/index.vue
+        create  app/javascript/views/some_models/edit.vue
+        create  app/javascript/views/some_models/new.vue
+        create  app/javascript/views/some_models/_form.vue
+        create  app/javascript/packs/vuex/modules/some_models/some_models.js
+
+        modify app/javascript/packs/router/index.js
+        modify app/javascript/packs/lib/slideMenuItems_dev.js
