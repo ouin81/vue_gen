@@ -6,37 +6,37 @@ class VueGenerator < Rails::Generators::NamedBase
   attr_accessor :options, :attributes
 
   # similar create vue file the given location usign the template
-  # creates file app/javascript/views/[namespace]/[controller]/action.vue
+  # creates file app/frontend/views/[namespace]/[controller]/action.vue
   def create_vue_file_index
-    template "index.erb", "app/javascript/views/#{plural_name}/index.vue"
+    template "index.erb", "app/frontend/views/#{plural_name}/index.vue"
   end
 
   def create_vue_file_edit
-    template "edit.erb", "app/javascript/views/#{plural_name}/edit.vue"
+    template "edit.erb", "app/frontend/views/#{plural_name}/edit.vue"
   end
 
   def create_vue_file_new
-    template "new.erb", "app/javascript/views/#{plural_name}/new.vue"
+    template "new.erb", "app/frontend/views/#{plural_name}/new.vue"
   end
 
   def create_vue_file_form
-    template "_form.erb", "app/javascript/views/#{plural_name}/_form.vue"
+    template "_form.erb", "app/frontend/views/#{plural_name}/_form.vue"
   end
 
   def create_vue_file_show
-    # template "_form.erb", "app/javascript/views/#{plural_name}/_form.vue"
+    # template "_form.erb", "app/frontend/views/#{plural_name}/_form.vue"
   end
 
   def create_vuex_modules
-    template "modules.js.erb", "app/javascript/packs/vuex/modules/#{plural_name}/#{plural_name}.js"
+    template "modules.js.erb", "app/frontend/packs/vuex/modules/#{plural_name}/#{plural_name}.js"
   end
 
   # def create_apis
-  #   template "api.js.erb", "app/javascript/packs/vuex/api/#{plural_name}/#{plural_name}.js"
+  #   template "api.js.erb", "app/frontend/packs/vuex/api/#{plural_name}/#{plural_name}.js"
   # end
 
   def create_router_item
-    output_path = "app/javascript/packs/router/index.js"
+    output_path = "app/frontend/packs/router/index.js"
     root_js_file = "#{Rails.root.to_s}/#{output_path}"
     file = File.open(root_js_file, "rb")
     contents = file.read
@@ -49,7 +49,7 @@ class VueGenerator < Rails::Generators::NamedBase
   end
 
   def create_menu_item
-    output_path = "app/javascript/packs/lib/slideMenuItems_dev.js"
+    output_path = "app/frontend/packs/lib/slideMenuItems_dev.js"
     menu_js_file = "#{Rails.root.to_s}/#{output_path}"
     file = File.open(menu_js_file, "rb")
     contents = file.read
