@@ -5,11 +5,11 @@ Example:
     rails generate vue SomeModel
     
     This will create:
-        create  app/javascript/views/some_models/index.vue
-        create  app/javascript/views/some_models/edit.vue
-        create  app/javascript/views/some_models/new.vue
-        create  app/javascript/views/some_models/_form.vue
-        create  app/javascript/packs/vuex/modules/some_models/some_models.js
+        create  app/frontend/views/some_models/index.vue
+        create  app/frontend/views/some_models/edit.vue
+        create  app/frontend/views/some_models/new.vue
+        create  app/frontend/views/some_models/_form.vue
+        create  app/frontend/packs/vuex/modules/some_models/some_models.js
 
-        modify app/javascript/packs/router/index.js
-        modify app/javascript/packs/lib/slideMenuItems_dev.js
+        modify app/frontend/packs/router/index.js
+        modify app/frontend/packs/lib/slideMenuItems_dev.js
