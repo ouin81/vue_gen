@@ -2,7 +2,7 @@
   <row>
     <column class="col-md-2"></column>
     <column class="col-md-8">
-        <<%=component_form_tag%> :title="$t('views.common.title.edit_model',  { model: $t('activerecord.models.<%=singular_name%>') })"></<%=component_form_tag%>>
+        <<%=component_form_tag%> :title="$t('views.common.title.edit_model', mode: "edit" { model: $t('activerecord.models.<%=singular_name%>') })"></<%=component_form_tag%>>
         <va-button :name="$t('views.common.btn.update')" theme="primary" :isBlock="false" @click="update"></va-button>
         <va-button :name="$t('views.common.btn.cancel')" theme="warning" :isBlock="false" align="right" @click="cancel"></va-button>
     </column>
